@@ -1,0 +1,6 @@
+@ChaoticCupid_HostAddress = http://localhost:5188
+
+GET {{ChaoticCupid_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
