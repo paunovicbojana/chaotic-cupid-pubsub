@@ -30,7 +30,7 @@ namespace Server.Workers
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(60), stoppingToken);
 
                 var allParticipants = _matchmakingService.GetAll();
 
