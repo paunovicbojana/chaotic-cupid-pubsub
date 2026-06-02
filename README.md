@@ -10,7 +10,7 @@ A real-time matchmaking application built with ASP.NET Core and SignalR. Cupid r
 2. The **CupidWorker** runs every 10 seconds, iterates over all connected participants, and for each one finds the best available match using a scoring system.
 3. A love letter is sent to the recipient via `ReceiveLetter`. The recipient must confirm receipt before they can receive the next letter.
 4. The sender's phone number is included in the letter only if the message is positive - it is withheld for rejection messages.
-5. Users can block others at any time with the `/block <username>` command. Blocked users are skipped during matching in both directions.
+5. Users can block others at any time with the `/block <username>` command. Blocked users are skipped during matching in both directions. Users cannot block themselves.
 
 ### Matching Score
 
@@ -88,7 +88,7 @@ cd TestClient
 dotnet run
 ```
 
-Registers 5 pre-defined users simultaneously, waits for Cupid to send letters, then runs a block test (Ana blocks Boban). Press Enter to disconnect all clients.
+Registers 5 pre-defined users simultaneously, waits for Cupid to send letters, then runs block tests (Ana blocks Boban & Ana blocks herself). Press Enter to disconnect all clients.
 
 ---
 
@@ -102,12 +102,13 @@ Registers 5 pre-defined users simultaneously, waits for Cupid to send letters, t
 
 ## Client Events (Server → Client)
 
-| Event           | Payload          | Description                          |
-| --------------- | ---------------- | ------------------------------------ |
-| `InitConfirmed` | message (string) | Registration successful              |
-| `InitFailed`    | message (string) | Username already taken               |
-| `ReceiveLetter` | `LetterDTO`      | A new love letter arrived            |
-| `UserBlocked`   | message (string) | Confirmation that a user was blocked |
+| Event             | Payload          | Description                                               |
+| ----------------- | ---------------- | --------------------------------------------------------- |
+| `InitConfirmed`   | message (string) | Registration successful                                   |
+| `InitFailed`      | message (string) | Username already taken                                    |
+| `ReceiveLetter`   | `LetterDTO`      | A new love letter arrived                                 |
+| `UserBlocked`     | message (string) | Confirmation that a user was successfully blocked         |
+| `UserBlockFailed` | message (string) | Blocking failed (e.g. user attempted to block themselves) |
 
 ---
 
