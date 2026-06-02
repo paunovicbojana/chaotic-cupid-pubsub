@@ -70,6 +70,15 @@ namespace Server.Hubs
 
             if (person != null)
             {
+                if (person.Username == usernameToBlock)
+                {
+                    Console.WriteLine(
+                        $"[SERVER] User {person.Username} tried to block self.");
+                    await Clients.Caller.SendAsync(
+                        "UserBlockFailed",
+                        $"You cannot block yourself!");
+                    return;
+                }
                 person.BlockedUsers.Add(usernameToBlock);
 
                 Console.WriteLine(

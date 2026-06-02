@@ -20,20 +20,23 @@ foreach (var person in persons)
     var name = person.Username;
 
     connection.On<string>("InitConfirmed", (msg) =>
-        Console.WriteLine($"[{name}] ✅ {msg}"));
+        Console.WriteLine($"[{name}] {msg}"));
 
     connection.On<string>("InitFailed", (msg) =>
-        Console.WriteLine($"[{name}] ❌ {msg}"));
+        Console.WriteLine($"[{name}] {msg}"));
 
     connection.On<string>("UserBlocked", (msg) =>
-        Console.WriteLine($"[{name}] 🚫 {msg}"));
+        Console.WriteLine($"[{name}] {msg}"));
+
+    connection.On<string>("UserBlockFailed", (msg) =>
+        Console.WriteLine($"[{name}] {msg}"));
 
     connection.On<object>("ReceiveLetter", async (letter) =>
     {
-        Console.WriteLine($"[{name}] 💌 Letter received: {letter}");
+        Console.WriteLine($"[{name}] Letter received: {letter}");
         await Task.Delay(500);
         await connection.InvokeAsync("ConfirmLetter");
-        Console.WriteLine($"[{name}] ✔️  Letter confirmed.");
+        Console.WriteLine($"[{name}] Letter confirmed.");
     });
 
     await connection.StartAsync();
@@ -52,12 +55,18 @@ foreach (var person in persons)
     await Task.Delay(300);
 }
 
-Console.WriteLine("\n✅ All persons registered. Waiting for Cupid to send letters...");
-Console.WriteLine("Press Enter to run block test, or wait for letters.\n");
+Console.WriteLine("\nAll persons registered. Waiting for Cupid to send letters...");
+Console.WriteLine("Press Enter to run block tests, or wait for letters.\n");
 Console.ReadLine();
 
 Console.WriteLine("[TEST] Ana blocks Boban...");
 await connections[0].InvokeAsync("BlockUser", "Boban");
+
+Console.WriteLine("\nPress Enter to run next blocking test or wait for this one to finish...");
+Console.ReadLine();
+
+Console.WriteLine("[TEST] Ana blocks self...");
+await connections[0].InvokeAsync("BlockUser", "Ana");
 
 Console.WriteLine("\nPress Enter to disconnect all and exit.");
 Console.ReadLine();

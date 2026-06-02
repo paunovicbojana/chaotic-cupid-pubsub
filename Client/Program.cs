@@ -21,13 +21,18 @@ connection.On<string>("UserBlocked", (msg) =>
     Console.WriteLine($"[SERVER] {msg}");
 });
 
+connection.On<string>("UserBlockFailed", (msg) =>
+{
+    Console.WriteLine($"[SERVER] {msg}");
+});
+
 var letterConfirmation = new ManualResetEventSlim(false);
 
 connection.On<LetterDTO>("ReceiveLetter", async (letter) =>
 {
     letterConfirmation.Reset();
 
-    Console.WriteLine("\n💌 You've got a love letter!");
+    Console.WriteLine("\nYou've got a love letter!");
     Console.WriteLine($"   From:    {letter.Sender.Username}");
     Console.WriteLine($"   City:    {letter.Sender.City}");
     Console.WriteLine($"   Age:     {letter.Sender.Years}");
